@@ -20,3 +20,5 @@ clean:
 logger.exe: logger.c logger.h
 	$(CC) logger.c -o logger.exe
 
+logger_client.o: logger_client.* logger.h
+	$(CC) logger_client.* logger.h -c -o logger_client.o
