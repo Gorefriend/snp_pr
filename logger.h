@@ -14,5 +14,20 @@
 
 #define LOG_LISTEN_PORT 1199
 
+typedef struct log_record {
+
+    /* message type: access, error, ... */
+    char msgtype[10];
+
+    /* access id */
+    char id[10];
+
+    /* termial */
+    char terminal[10];
+
+    /* date and time in RFC 2822 format */
+    char date[40];
+
+} log_record_t;
 
 #endif /* __logger_h__ */
