@@ -1,4 +1,8 @@
 #!/usr/bin/make -f
+#
+# Project Makefile
+#
+# Author: Philip Muskovac
 
 CFLAGS := -Wall -Wextra -g
 CC = gcc $(CFLAGS)
