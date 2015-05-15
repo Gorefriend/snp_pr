@@ -13,8 +13,9 @@
 #define __logger_h__
 
 #define LOG_LISTEN_PORT 1199
+#define DEFAULT_LOGFILE "access.log"
 
-typedef struct log_record {
+struct log_record {
 
     /* message type: access, error, ... */
     char msgtype[10];
@@ -28,6 +29,6 @@ typedef struct log_record {
     /* date and time in RFC 2822 format */
     char date[40];
 
-} log_record_t;
+};
 
 #endif /* __logger_h__ */
