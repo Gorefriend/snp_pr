@@ -118,10 +118,10 @@ int main(int argc, char **argv)
 
                 stFLock.l_whence = SEEK_END;
                 stFLock.l_start = 0;
-                stFLock.l_len = sizeof(szLogMessageBuffer) + 1;
+                stFLock.l_len = LOG_MESSAGE_SIZE;
 
                 // read a full log message from the socket
-                while ((iRead = read(iConnectionFd, szLogMessageBuffer, sizeof(szLogMessageBuffer))) > 0) {
+                while ((iRead = read(iConnectionFd, szLogMessageBuffer, LOG_MESSAGE_SIZE)) > 0) {
 
                     // check whether the recieved data is a sane log message
                     if (sanitizeLogMessage(szLogMessageBuffer) < 0) {
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 
                     // write to the end of the file
                     fseek(fdLogFile, 0L, SEEK_END);
-                    fwrite(szLogMessageBuffer, sizeof(szLogMessageBuffer), 1, fdLogFile);
+                    fwrite(szLogMessageBuffer, strlen(szLogMessageBuffer), 1, fdLogFile);
                     fflush(fdLogFile);
 
                     // release the file lock
