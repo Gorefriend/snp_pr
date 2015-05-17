@@ -25,7 +25,12 @@ int main(int argc, char **argv)
     log_to_string(&record, szMessage);
 
     iRet = log_message(szMessage);
-    printf("iRet: %d\n", iRet);
+
+    printf("log_message: %d\n", iRet);
+
+    iRet = log_access(0, 1);
+
+    printf("log_access. %d\n", iRet);
 
     close_logger();
 

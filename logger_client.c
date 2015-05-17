@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
+#include <time.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -71,8 +72,37 @@ int log_message(char *message)
     return 0;
 }
 
+int format_current_time(char *szBuffer, int iBufferSize)
+{
+    time_t t;
+    struct tm *pstTime;
+
+    t = time(NULL);
+    pstTime = localtime(&t);
+
+    return strftime(szBuffer, iBufferSize, "%a, %d %b %Y %T %z", pstTime);
+}
+
 int log_access(int iId, int iTerminal)
 {
+    struct log_record stLog;
+    char szBuffer[LOG_MESSAGE_SIZE];
+
+    strcpy(stLog.msgtype, "access");
+    sprintf(stLog.id, "%d", iId);
+    sprintf(stLog.terminal, "%d", iTerminal);
+
+    if (!format_current_time(stLog.date, 43)) {
+        fprintf(stderr, "error formatting current time\n");
+        return -1;
+    }
+
+    log_to_string(&stLog, szBuffer);
+    sanitizeLogMessage(szBuffer);
+
+    if (write(iLoggerClientSocketFd, szBuffer, LOG_MESSAGE_SIZE) != LOG_MESSAGE_SIZE) {
+        return -1;
+    }
     return 0;
 }
 
