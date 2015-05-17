@@ -25,7 +25,7 @@ int sanitizeLogMessage(char *szLogMessage)
 {
     char szTmp[LOG_MESSAGE_SIZE];
 
-    sprintf(szTmp, "%-78s\n", szLogMessage);
+    snprintf(szTmp, LOG_MESSAGE_SIZE, "%-79s\n", szLogMessage);
 
     strncpy(szLogMessage, szTmp, LOG_MESSAGE_SIZE);
 

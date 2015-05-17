@@ -14,6 +14,6 @@
 
 #define LOG_LISTEN_PORT 1199
 #define DEFAULT_LOGFILE "access.log"
-#define LOG_MESSAGE_SIZE 80
+#define LOG_MESSAGE_SIZE 81
 
 #endif /* __logger_h__ */
