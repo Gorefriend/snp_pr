@@ -10,7 +10,23 @@
 #ifndef __logger_client_h__
 #define __logger_client_h__
 
-#include "logger.h"
+struct log_record {
+
+    // message type: access, error, ...
+    char msgtype[12];
+
+    // access id
+    char id[12];
+
+    // termial
+    char terminal[12];
+
+    // date and time in RFC 2822 format
+    char date[43];
+
+    char eol[1];
+
+};
 
 int iLoggerClientSocketFd;
 
