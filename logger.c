@@ -19,6 +19,7 @@
 #include <sys/wait.h>
 
 #include "logger.h"
+#include "logger_client.h"
 
 int iLoggerSocketFd;
 FILE *fdLogFile;
@@ -34,11 +35,6 @@ void vClose(void)
     }
 }
 
-int sanitizeLogMessage(char *szLogMessage)
-{
-    // TODO
-    return 0;
-}
 
 int main(int argc, char **argv)
 {
@@ -57,7 +53,7 @@ int main(int argc, char **argv)
     char *szFileName;
     struct flock stFLock;
 
-    char szLogMessageBuffer[sizeof(struct log_record)];
+    char szLogMessageBuffer[LOG_MESSAGE_SIZE];
 
     atexit(vClose);
 
@@ -127,22 +123,21 @@ int main(int argc, char **argv)
                 // read a full log message from the socket
                 while ((iRead = read(iConnectionFd, szLogMessageBuffer, sizeof(szLogMessageBuffer))) > 0) {
 
-                    szLogMessageBuffer[iRead] = 0;
+                    // check whether the recieved data is a sane log message
+                    if (sanitizeLogMessage(szLogMessageBuffer) < 0) {
+                        fprintf(stderr, "Invalid log Message recieved, skipping: %s\n", szLogMessageBuffer);
+                        continue;
+                    }
 
                     if (!quiet) {
                         printf("Recieved Message:\n%s\n", szLogMessageBuffer);
+                        printf("Length: %d\n", iRead);
                     }
 
                     // lock the file at the end for a log message
                     stFLock.l_type = F_WRLCK;
                     if (fcntl(fileno(fdLogFile), F_SETLKW, &stFLock) < 0) {
                         fprintf(stderr, "Error locking <%s>: %s\n", szFileName, strerror(errno));
-                        continue;
-                    }
-
-                    // check whether the recieved data is a sane log message
-                    if (sanitizeLogMessage(szLogMessageBuffer) < 0) {
-                        fprintf(stderr, "Invalid log Message recieved, skipping: %s\n", szLogMessageBuffer);
                         continue;
                     }
 

@@ -14,20 +14,23 @@
 
 #define LOG_LISTEN_PORT 1199
 #define DEFAULT_LOGFILE "access.log"
+#define LOG_MESSAGE_SIZE 80
 
 struct log_record {
 
-    /* message type: access, error, ... */
-    char msgtype[10];
+    // message type: access, error, ...
+    char msgtype[12];
 
-    /* access id */
-    char id[10];
+    // access id
+    char id[12];
 
-    /* termial */
-    char terminal[10];
+    // termial
+    char terminal[12];
 
-    /* date and time in RFC 2822 format */
-    char date[40];
+    // date and time in RFC 2822 format
+    char date[43];
+
+    char eol[1];
 
 };
 
